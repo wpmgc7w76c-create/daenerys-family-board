@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jones Family Board</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:linear-gradient(135deg,#0d0221,#1a0a2e,#16213e);
+    color:#fff;
+    font-family:'Arial Rounded MT Bold',Arial,sans-serif;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  #header{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:30px 50px 20px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  #title{
+    font-size:3vw;color:#f9ca24;
+    text-shadow:0 0 30px #f9ca2466;
+    letter-spacing:2px;
+  }
+  #clock{text-align:right;}
+  #time{font-size:4vw;font-weight:900;color:#fff;}
+  #date{font-size:1.5vw;color:#aaa;margin-top:4px;}
+  #notices-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(400px,1fr));
+    gap:24px;
+    padding:40px 50px;
+  }
+  .notice-card{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12);
+    border-radius:20px;
+    padding:28px 32px;
+    position:relative;
+    transition:transform 0.2s;
+    animation:fadeIn 0.5s ease;
+  }
+  @keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+  .notice-name{
+    font-size:1.4vw;color:#f9ca24;
+    margin-bottom:10px;letter-spacing:1px;
+  }
+  .notice-msg{
+    font-size:2vw;line-height:1.5;color:#fff;
+  }
+  .notice-time{
+    font-size:1vw;color:#666;margin-top:14px;
+  }
+  .notice-del{
+    position:absolute;top:16px;right:18px;
+    background:none;border:none;color:#444;
+    font-size:1.4vw;cursor:pointer;
+    transition:color 0.2s;
+  }
+  .notice-del:hover{color:#e74c3c;}
+  #empty{
+    text-align:center;color:#444;
+    font-size:2.5vw;padding:100px 50px;
+    grid-column:1/-1;
+  }
+  #add-btn{
+    position:fixed;bottom:40px;right:50px;
+    background:linear-gradient(135deg,#f9ca24,#f0932b);
+    color:#222;font-weight:900;font-size:1.4vw;
+    border:none;border-radius:50px;
+    padding:16px 36px;cursor:pointer;
+    box-shadow:0 8px 30px rgba(249,202,36,0.4);
+    transition:transform 0.2s,box-shadow 0.2s;
+    text-decoration:none;display:inline-block;
+  }
+  #add-btn:hover{transform:scale(1.05);box-shadow:0 12px 40px rgba(249,202,36,0.5);}
+  #maths-strip{
+    display:flex;align-items:center;gap:20px;
+    padding:14px 50px;
+    background:rgba(107,203,119,0.08);
+    border-top:1px solid rgba(107,203,119,0.15);
+    font-size:1.3vw;color:#6bcb77;
+    position:fixed;bottom:0;left:0;right:0;
+  }
+</style>
+</head>
+<body>
+
+<div id="header">
+  <div id="title">⭐ Jones Family Board ⭐</div>
+  <div id="clock">
+    <div id="time">00:00</div>
+    <div id="date">Loading...</div>
+  </div>
+</div>
+
+<div id="notices-grid">
+  <div id="empty">Loading notices...</div>
+</div>
+
+<a href="/add" id="add-btn">+ Add Notice</a>
+
+<div id="maths-strip">
+  <span>📐 Daenerys Maths Board</span>
+  <span id="maths-status">Connect Arduino to see live score</span>
+</div>
+
+<script>
+function updateClock() {
+  const now = new Date();
+  document.getElementById('time').textContent =
+    now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
+  document.getElementById('date').textContent =
+    now.toLocaleDateString('en-GB', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+function timeAgo(iso) {
+  const diff = (Date.now() - new Date(iso)) / 1000;
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff/60) + ' mins ago';
+  if (diff < 86400) return Math.floor(diff/3600) + ' hrs ago';
+  return Math.floor(diff/86400) + ' days ago';
+}
+
+async function deleteNotice(id) {
+  await fetch('/api/notices?id=' + id, {method:'DELETE'});
+  loadNotices();
+}
+
+async function loadNotices() {
+  try {
+    const r = await fetch('/api/notices');
+    const notices = await r.json();
+    const grid = document.getElementById('notices-grid');
+    if (!notices.length) {
+      grid.innerHTML = '<div id="empty">No notices yet — be the first to add one!</div>';
+      return;
+    }
+    grid.innerHTML = notices.map(n => `
+      <div class="notice-card">
+        <button class="notice-del" onclick="deleteNotice(${n.id})" title="Delete">✕</button>
+        <div class="notice-name">📌 ${n.name}</div>
+        <div class="notice-msg">${n.message}</div>
+        <div class="notice-time">${timeAgo(n.time)}</div>
+      </div>
+    `).join('');
+  } catch(e) {
+    document.getElementById('notices-grid').innerHTML =
+      '<div id="empty">Could not load notices.</div>';
+  }
+}
+
+loadNotices();
+setInterval(loadNotices, 30000);
+</script>
+</body>
+</html>

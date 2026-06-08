@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Notice</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:linear-gradient(135deg,#0d0221,#1a0a2e);
+    color:#fff;min-height:100vh;
+    font-family:'Arial Rounded MT Bold',Arial,sans-serif;
+    display:flex;flex-direction:column;align-items:center;
+    justify-content:center;padding:30px 20px;
+  }
+  h1{font-size:7vw;color:#f9ca24;margin-bottom:8px;text-align:center;}
+  .sub{color:#888;font-size:4vw;margin-bottom:40px;text-align:center;}
+  form{width:100%;max-width:500px;}
+  label{display:block;color:#f9ca24;font-size:4vw;margin-bottom:8px;}
+  input,textarea{
+    width:100%;padding:16px 20px;border-radius:14px;
+    background:rgba(255,255,255,0.08);
+    border:2px solid rgba(255,255,255,0.15);
+    color:#fff;font-size:5vw;margin-bottom:24px;
+    font-family:inherit;
+    -webkit-appearance:none;
+  }
+  input:focus,textarea:focus{
+    outline:none;border-color:#f9ca24;
+    background:rgba(255,255,255,0.12);
+  }
+  textarea{min-height:140px;resize:vertical;}
+  button{
+    width:100%;padding:20px;border:none;border-radius:14px;
+    background:linear-gradient(135deg,#f9ca24,#f0932b);
+    color:#222;font-weight:900;font-size:5.5vw;
+    cursor:pointer;font-family:inherit;
+    box-shadow:0 8px 30px rgba(249,202,36,0.4);
+    transition:transform 0.15s;
+  }
+  button:active{transform:scale(0.97);}
+  #success{
+    display:none;text-align:center;
+    font-size:8vw;color:#6bcb77;margin-top:30px;
+    animation:pop 0.4s ease;
+  }
+  @keyframes pop{from{transform:scale(0.5);opacity:0;}to{transform:scale(1);opacity:1;}}
+  #back{
+    margin-top:24px;color:#888;font-size:4vw;
+    text-decoration:none;display:block;text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<h1>📌 Add a Notice</h1>
+<p class="sub">Leave a message for the family</p>
+
+<form id="form">
+  <label>Your name</label>
+  <input type="text" id="name" placeholder="e.g. Mum, Dad, Daenerys..." autocomplete="off" required>
+
+  <label>Message</label>
+  <textarea id="message" placeholder="What do you want to tell everyone?" required></textarea>
+
+  <button type="submit">Post Notice ✉️</button>
+</form>
+
+<div id="success">✅ Posted!</div>
+<a href="/" id="back">← Back to board</a>
+
+<script>
+// Pre-fill name from localStorage
+const savedName = localStorage.getItem('boardName');
+if (savedName) document.getElementById('name').value = savedName;
+
+document.getElementById('form').addEventListener('submit', async e => {
+  e.preventDefault();
+  const name = document.getElementById('name').value.trim();
+  const message = document.getElementById('message').value.trim();
+  if (!name || !message) return;
+
+  localStorage.setItem('boardName', name);
+
+  try {
+    const r = await fetch('/api/notices', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({name, message})
+    });
+    if (r.ok) {
+      document.getElementById('form').style.display = 'none';
+      document.getElementById('success').style.display = 'block';
+      setTimeout(() => window.location.href = '/', 1500);
+    }
+  } catch(e) {
+    alert('Could not post notice. Check your connection.');
+  }
+});
+</script>
+</body>
+</html>
