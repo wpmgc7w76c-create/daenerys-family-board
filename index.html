@@ -1,160 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jones Family Board</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Jones Family Hub</title>
 <style>
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{
-    background:linear-gradient(135deg,#0d0221,#1a0a2e,#16213e);
-    color:#fff;
-    font-family:'Arial Rounded MT Bold',Arial,sans-serif;
-    min-height:100vh;
-    overflow-x:hidden;
-  }
-  #header{
-    display:flex;justify-content:space-between;align-items:center;
-    padding:30px 50px 20px;
-    border-bottom:1px solid rgba(255,255,255,0.1);
-  }
-  #title{
-    font-size:3vw;color:#f9ca24;
-    text-shadow:0 0 30px #f9ca2466;
-    letter-spacing:2px;
-  }
-  #clock{text-align:right;}
-  #time{font-size:4vw;font-weight:900;color:#fff;}
-  #date{font-size:1.5vw;color:#aaa;margin-top:4px;}
-  #notices-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(400px,1fr));
-    gap:24px;
-    padding:40px 50px;
-  }
-  .notice-card{
-    background:rgba(255,255,255,0.06);
-    border:1px solid rgba(255,255,255,0.12);
-    border-radius:20px;
-    padding:28px 32px;
-    position:relative;
-    transition:transform 0.2s;
-    animation:fadeIn 0.5s ease;
-  }
-  @keyframes fadeIn{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
-  .notice-name{
-    font-size:1.4vw;color:#f9ca24;
-    margin-bottom:10px;letter-spacing:1px;
-  }
-  .notice-msg{
-    font-size:2vw;line-height:1.5;color:#fff;
-  }
-  .notice-time{
-    font-size:1vw;color:#666;margin-top:14px;
-  }
-  .notice-del{
-    position:absolute;top:16px;right:18px;
-    background:none;border:none;color:#444;
-    font-size:1.4vw;cursor:pointer;
-    transition:color 0.2s;
-  }
-  .notice-del:hover{color:#e74c3c;}
-  #empty{
-    text-align:center;color:#444;
-    font-size:2.5vw;padding:100px 50px;
-    grid-column:1/-1;
-  }
-  #add-btn{
-    position:fixed;bottom:40px;right:50px;
-    background:linear-gradient(135deg,#f9ca24,#f0932b);
-    color:#222;font-weight:900;font-size:1.4vw;
-    border:none;border-radius:50px;
-    padding:16px 36px;cursor:pointer;
-    box-shadow:0 8px 30px rgba(249,202,36,0.4);
-    transition:transform 0.2s,box-shadow 0.2s;
-    text-decoration:none;display:inline-block;
-  }
-  #add-btn:hover{transform:scale(1.05);box-shadow:0 12px 40px rgba(249,202,36,0.5);}
-  #maths-strip{
-    display:flex;align-items:center;gap:20px;
-    padding:14px 50px;
-    background:rgba(107,203,119,0.08);
-    border-top:1px solid rgba(107,203,119,0.15);
-    font-size:1.3vw;color:#6bcb77;
-    position:fixed;bottom:0;left:0;right:0;
-  }
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Nunito',sans-serif;background:#0d0520;color:white;min-height:100vh;overflow-x:hidden}
+
+  .hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;background:radial-gradient(ellipse at 40% 30%,#1a0a3d,#0d0520);position:relative;overflow:hidden}
+
+  .stars div{position:absolute;border-radius:50%;background:white;animation:twinkle 3s ease-in-out infinite}
+  @keyframes twinkle{0%,100%{opacity:0.1}50%{opacity:0.6}}
+
+  .title{font-family:'Fredoka One',sans-serif;font-size:clamp(36px,8vw,90px);color:#FFD700;text-shadow:0 4px 20px rgba(255,215,0,0.4);text-align:center;animation:float 4s ease-in-out infinite;margin-bottom:8px}
+  .subtitle{font-size:clamp(14px,2vw,20px);color:rgba(255,255,255,0.5);text-align:center;margin-bottom:48px;letter-spacing:0.05em}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;margin-bottom:48px}
+  .card{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:18px;padding:20px 22px;display:flex;align-items:center;gap:14px;animation:fadeUp 0.6s ease both}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+  .card:nth-child(1){animation-delay:0.1s}.card:nth-child(2){animation-delay:0.2s}.card:nth-child(3){animation-delay:0.3s}.card:nth-child(4){animation-delay:0.4s}
+  .card-icon{font-size:36px;flex-shrink:0}
+  .card-label{font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px}
+  .card-value{font-family:'Fredoka One',sans-serif;font-size:22px;color:white}
+  .card-sub{font-size:12px;color:rgba(255,255,255,0.4);margin-top:2px}
+
+  .info-panel{width:100%;max-width:580px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:18px;padding:20px 24px;margin-bottom:48px;min-height:90px;animation:fadeUp 0.6s 0.5s ease both;opacity:0}
+  .panel-label{font-size:11px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px}
+  .panel-main{font-size:clamp(15px,2vw,18px);font-weight:700;color:white;line-height:1.4}
+  .panel-sub{font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px}
+  .panel-dots{display:flex;gap:6px;justify-content:flex-end;margin-top:12px}
+  .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.25);transition:background 0.3s}
+  .dot.active{background:#FFD700}
+
+  .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;width:100%;max-width:700px;animation:fadeUp 0.6s 0.7s ease both;opacity:0}
+  .menu-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:16px;padding:20px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;transition:all 0.2s;color:white;text-decoration:none}
+  .menu-btn:hover{background:rgba(255,255,255,0.15);transform:translateY(-3px)}
+  .menu-btn-icon{font-size:32px}
+  .menu-btn-label{font-family:'Fredoka One',sans-serif;font-size:16px;text-align:center}
+
+  .notices-section{width:100%;max-width:900px;margin-top:48px;animation:fadeUp 0.6s 0.9s ease both;opacity:0}
+  .notices-title{font-family:'Fredoka One',sans-serif;font-size:22px;color:rgba(255,255,255,0.5);margin-bottom:16px;text-align:center;letter-spacing:0.05em}
+  .stickies{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+  .sticky{border-radius:4px;padding:14px 16px;box-shadow:3px 3px 12px rgba(0,0,0,0.5);display:inline-block;max-width:240px;min-width:160px;position:relative;transition:transform 0.2s,box-shadow 0.2s}
+  .sticky:hover{transform:rotate(0deg) scale(1.04)!important;box-shadow:6px 6px 20px rgba(0,0,0,0.5)}
+  .sticky p{font-size:14px;font-weight:700;line-height:1.4}
+  .sticky span{font-size:11px;display:block;margin-top:6px;opacity:0.7}
+  .sticky-del{position:absolute;top:6px;right:8px;background:none;border:none;font-size:14px;cursor:pointer;line-height:1;opacity:0.4}
+  .sticky-del:hover{opacity:0.9}
+  .sc0{background:#f1c40f;transform:rotate(-1.5deg);color:#7d6608}
+  .sc1{background:#e74c3c;transform:rotate(1.2deg);color:#7b1a1a}
+  .sc2{background:#2ecc71;transform:rotate(-0.8deg);color:#1a6b3a}
+  .sc3{background:#3498db;transform:rotate(1.8deg);color:#1a4a7b}
+  .sc4{background:#9b59b6;transform:rotate(-1.2deg);color:#4a1a6b}
+  .no-notices{color:rgba(255,255,255,0.3);font-size:14px;text-align:center;padding:20px}
+
+  .add-notice-btn{display:inline-flex;align-items:center;gap:8px;margin-top:20px;background:rgba(255,215,0,0.15);border:1px solid rgba(255,215,0,0.3);border-radius:50px;padding:10px 24px;color:#FFD700;font-family:'Fredoka One',sans-serif;font-size:16px;cursor:pointer;text-decoration:none;transition:all 0.2s}
+  .add-notice-btn:hover{background:rgba(255,215,0,0.25);transform:scale(1.04)}
+
+  .lock{position:fixed;bottom:20px;right:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;color:rgba(255,255,255,0.3)}
 </style>
 </head>
 <body>
 
-<div id="header">
-  <div id="title">⭐ Jones Family Board ⭐</div>
-  <div id="clock">
-    <div id="time">00:00</div>
-    <div id="date">Loading...</div>
+<div class="hero">
+  <div class="stars" id="stars"></div>
+
+  <div class="title">Jones Family Hub 🏠</div>
+  <div class="subtitle">MIDGE POINT · QLD</div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon" id="wx-icon">🌤️</div>
+      <div>
+        <div class="card-label">Weather</div>
+        <div class="card-value" id="wx-temp">Loading...</div>
+        <div class="card-sub" id="wx-desc">Midge Point</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎂</div>
+      <div>
+        <div class="card-label">Next birthday</div>
+        <div class="card-value" id="bday-days">—</div>
+        <div class="card-sub" id="bday-name">—</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📌</div>
+      <div>
+        <div class="card-label">Noticeboard</div>
+        <div class="card-value" id="notice-count">—</div>
+        <div class="card-sub">family messages</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧮</div>
+      <div>
+        <div class="card-label">Maths Board</div>
+        <div class="card-value" id="maths-status">—</div>
+        <div class="card-sub" id="maths-sub">tap to play</div>
+      </div>
+    </div>
   </div>
-</div>
 
-<div id="notices-grid">
-  <div id="empty">Loading notices...</div>
-</div>
+  <div class="info-panel" id="info-panel">
+    <div style="display:flex;gap:14px;align-items:flex-start">
+      <div style="font-size:32px;flex-shrink:0" id="panel-icon">🤔</div>
+      <div style="flex:1">
+        <div class="panel-label" id="panel-label">Did You Know?</div>
+        <div class="panel-main" id="panel-main">Loading...</div>
+        <div class="panel-sub" id="panel-sub"></div>
+      </div>
+    </div>
+    <div class="panel-dots">
+      <div class="dot active" id="d0"></div>
+      <div class="dot" id="d1"></div>
+      <div class="dot" id="d2"></div>
+    </div>
+  </div>
 
-<a href="/add" id="add-btn">+ Add Notice</a>
+  <div class="menu-grid">
+    <a class="menu-btn" href="http://10.0.1.65" target="_blank">
+      <div class="menu-btn-icon">🧮</div>
+      <div class="menu-btn-label">Maths Quiz</div>
+    </a>
+    <a class="menu-btn" href="/add">
+      <div class="menu-btn-icon">📝</div>
+      <div class="menu-btn-label">Add Notice</div>
+    </a>
+    <div class="menu-btn" onclick="alert('Coming soon!')">
+      <div class="menu-btn-icon">🛒</div>
+      <div class="menu-btn-label">Shopping</div>
+    </div>
+    <div class="menu-btn" onclick="alert('Coming soon!')">
+      <div class="menu-btn-icon">🫙</div>
+      <div class="menu-btn-label">Activities</div>
+    </div>
+    <div class="menu-btn" onclick="alert('Coming soon!')">
+      <div class="menu-btn-icon">💰</div>
+      <div class="menu-btn-label">Pocket Money</div>
+    </div>
+    <div class="menu-btn" onclick="alert('Coming soon!')">
+      <div class="menu-btn-icon">🎂</div>
+      <div class="menu-btn-label">Birthdays</div>
+    </div>
+  </div>
 
-<div id="maths-strip">
-  <span>📐 Daenerys Maths Board</span>
-  <span id="maths-status">Connect Arduino to see live score</span>
+  <div class="notices-section">
+    <div class="notices-title">📌 FAMILY NOTICES</div>
+    <div class="stickies" id="stickies">
+      <div class="no-notices">Loading notices...</div>
+    </div>
+    <div style="text-align:center;margin-top:16px">
+      <a class="add-notice-btn" href="/add">+ Leave a message</a>
+    </div>
+  </div>
+
+  <div class="lock">🔒</div>
 </div>
 
 <script>
-function updateClock() {
-  const now = new Date();
-  document.getElementById('time').textContent =
-    now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
-  document.getElementById('date').textContent =
-    now.toLocaleDateString('en-GB', {weekday:'long',day:'numeric',month:'long',year:'numeric'});
-}
-setInterval(updateClock, 1000);
-updateClock();
+// Stars
+const starsEl=document.getElementById('stars');
+for(let i=0;i<20;i++){const s=document.createElement('div');const sz=Math.random()*3+2;s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${Math.random()*3+2}s`;starsEl.appendChild(s);}
 
-function timeAgo(iso) {
-  const diff = (Date.now() - new Date(iso)) / 1000;
-  if (diff < 60) return 'just now';
-  if (diff < 3600) return Math.floor(diff/60) + ' mins ago';
-  if (diff < 86400) return Math.floor(diff/3600) + ' hrs ago';
-  return Math.floor(diff/86400) + ' days ago';
-}
+// Weather
+const wmoIcon=c=>{c=parseInt(c);if(c===113)return"☀️";if(c===116)return"⛅";if([119,122].includes(c))return"☁️";if([143,248].includes(c))return"🌫️";if([176,263,293,296].includes(c))return"🌦️";if([299,302,305,308].includes(c))return"🌧️";if([200,386].includes(c))return"⛈️";return"🌡️";};
+let wxTemp='—',wxDesc='Midge Point',wxIcon='🌤️';
+fetch('https://wttr.in/Midge+Point+QLD?format=j1').then(r=>r.json()).then(d=>{const c=d.current_condition[0];wxIcon=wmoIcon(c.weatherCode);wxTemp=c.temp_C+'°C';wxDesc=c.weatherDesc[0].value;document.getElementById('wx-icon').textContent=wxIcon;document.getElementById('wx-temp').textContent=wxTemp;document.getElementById('wx-desc').textContent=wxDesc;}).catch(()=>{document.getElementById('wx-temp').textContent='—';});
 
-async function deleteNotice(id) {
-  await fetch('/api/notices?id=' + id, {method:'DELETE'});
-  loadNotices();
-}
+// Birthdays
+const bdays=[{name:'Ben',dob:'1993-03-14'},{name:'Emily',dob:'1997-05-22'},{name:'Daenerys',dob:'2018-06-16'}];
+const getDays=dob=>{const t=new Date();t.setHours(0,0,0,0);const b=new Date(dob);const n=new Date(t.getFullYear(),b.getMonth(),b.getDate());if(n<t)n.setFullYear(t.getFullYear()+1);return Math.round((n-t)/86400000);};
+const nextB=[...bdays].sort((a,b)=>getDays(a.dob)-getDays(b.dob))[0];
+const d=getDays(nextB.dob);
+document.getElementById('bday-days').textContent=d===0?'TODAY!':d===1?'Tomorrow!':d+' days';
+document.getElementById('bday-name').textContent=nextB.name;
 
-async function loadNotices() {
-  try {
-    const r = await fetch('/api/notices');
-    const notices = await r.json();
-    const grid = document.getElementById('notices-grid');
-    if (!notices.length) {
-      grid.innerHTML = '<div id="empty">No notices yet — be the first to add one!</div>';
-      return;
-    }
-    grid.innerHTML = notices.map(n => `
-      <div class="notice-card">
-        <button class="notice-del" onclick="deleteNotice(${n.id})" title="Delete">✕</button>
-        <div class="notice-name">📌 ${n.name}</div>
-        <div class="notice-msg">${n.message}</div>
-        <div class="notice-time">${timeAgo(n.time)}</div>
-      </div>
-    `).join('');
-  } catch(e) {
-    document.getElementById('notices-grid').innerHTML =
-      '<div id="empty">Could not load notices.</div>';
-  }
-}
+// Maths board
+fetch('http://10.0.1.65/state',{signal:AbortSignal.timeout(2000)}).then(r=>r.json()).then(d=>{const names=['Splash','Choose Level','Question','Correct!','Wrong','Score'];document.getElementById('maths-status').textContent=names[d.st]||'Online';document.getElementById('maths-sub').textContent='Score: '+d.sc+' / '+d.qt;}).catch(()=>{document.getElementById('maths-status').textContent='Offline';document.getElementById('maths-sub').textContent='connect Arduino to WiFi';});
 
+// Notices
+function timeAgo(iso){const diff=(Date.now()-new Date(iso))/1000;if(diff<60)return'just now';if(diff<3600)return Math.floor(diff/60)+' mins ago';if(diff<86400)return Math.floor(diff/3600)+' hrs ago';return Math.floor(diff/86400)+' days ago';}
+async function deleteNotice(id){await fetch('/api/notices?id='+id,{method:'DELETE'});loadNotices();}
+async function loadNotices(){
+  try{
+    const r=await fetch('/api/notices');const notices=await r.json();
+    const el=document.getElementById('stickies');
+    document.getElementById('notice-count').textContent=notices.length+' notice'+(notices.length!==1?'s':'');
+    if(!notices.length){el.innerHTML='<div class="no-notices">No messages yet — be the first!</div>';return;}
+    el.innerHTML=notices.map((n,i)=>`<div class="sticky sc${i%5}"><button class="sticky-del" onclick="deleteNotice(${n.id})">✕</button><p>${n.message}</p><span>— ${n.name} · ${timeAgo(n.time)}</span></div>`).join('');
+  }catch(e){document.getElementById('stickies').innerHTML='<div class="no-notices">Could not load notices.</div>';}
+}
 loadNotices();
-setInterval(loadNotices, 30000);
+setInterval(loadNotices,30000);
+
+// Cycling panel
+const facts=[{icon:'🐙',label:'Did You Know?',main:"Octopuses have THREE hearts and BLUE blood!",sub:''},{icon:'⚡',label:'Did You Know?',main:"Lightning is 5x hotter than the surface of the Sun.",sub:''},{icon:'🦈',label:'Did You Know?',main:"Sharks are older than trees — around 450 million years!",sub:''},{icon:'🍯',label:'Did You Know?',main:"Honey never goes bad. 3000-year-old Egyptian honey was still edible.",sub:''},{icon:'🐬',label:'Did You Know?',main:"Dolphins sleep with one eye open.",sub:''},{icon:'🌍',label:'Did You Know?',main:"A day on Venus is longer than a year on Venus.",sub:''},{icon:'🦋',label:'Did You Know?',main:"Butterflies taste with their feet!",sub:''}];
+const wxPanel=()=>({icon:wxIcon,label:'Midge Point Right Now',main:wxTemp+' · '+wxDesc,sub:''});
+const bdayPanel=()=>({icon:'🎂',label:'Next Birthday',main:nextB.name+' — '+(d===0?'Today!':d===1?'Tomorrow!':d+' days away'),sub:'Turning '+(new Date().getFullYear()-new Date(nextB.dob).getFullYear()+(d===0?0:1))+' on '+new Date(nextB.dob).toLocaleDateString('en-AU',{day:'numeric',month:'long'})});
+let pi=0;
+const panels=[wxPanel(),...facts.slice(0,2),bdayPanel(),...facts.slice(2)];
+const setPanel=()=>{const p=panels[pi%panels.length];document.getElementById('panel-icon').textContent=p.icon;document.getElementById('panel-label').textContent=p.label;document.getElementById('panel-main').textContent=p.main;document.getElementById('panel-sub').textContent=p.sub||'';[0,1,2].forEach(i=>document.getElementById('d'+i).classList.toggle('active',i===(pi%3)));};
+setPanel();
+const infoEl=document.getElementById('info-panel');
+infoEl.style.transition='opacity 0.4s ease,transform 0.4s ease';
+setInterval(()=>{infoEl.style.opacity='0';infoEl.style.transform='translateY(8px)';setTimeout(()=>{pi++;setPanel();infoEl.style.opacity='1';infoEl.style.transform='translateY(0)';},400);},5000);
 </script>
 </body>
 </html>
